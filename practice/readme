@@ -1,0 +1,1 @@
+So basically this is a deployment.yml file which i created. it will be creating 3 replica sets of the pods. sot hat if one of the pods gets deleted automatically another pod will be created.
