@@ -1,0 +1,35 @@
+Summary of Django App Deployment in Kubernetes with Minikube (May 26, 2025)
+
+1. Built Docker Image:
+   - Created a Docker image for a Django app (python-web-app) using a Dockerfile.
+   - Command: docker build -t arijit2001/django-app:v1 .
+   - Encountered an error ('docker buildx build' requires 1 argument) due to missing build context; fixed by adding '.' to the command.
+
+2. Pushed Image to Docker Hub:
+   - Logged into Docker Hub: docker login (username: arijit2001).
+   - Pushed the image: docker push arijit2001/django-app:v1.
+   - Image successfully uploaded to arijit2001/django-app repository.
+
+3. Created Kubernetes Deployment:
+   - Applied a deployment (sample-python-app) with 2 replicas using deployment.yml:
+     - Image: arijit2001/django-app:v1
+     - Container port: 8000
+   - Command: kubectl apply -f deployment.yml.
+   - Initially, pods were not ready (0/2 READY); later confirmed healthy (2/2 AVAILABLE).
+
+4. Created Kubernetes Service:
+   - Created a NodePort Service (django-service) using service.yml:
+     - Cluster IP: 10.111.211.250
+     - Port: 80 (maps to pod's port 8000)
+     - NodePort: 30007
+   - Command: kubectl apply -f service.yml.
+
+5. Tested Access:
+   - Tried accessing the app externally: curl -L http://192.168.49.2:30007/demo (Minikube IP: 192.168.49.2).
+   - Failed with "Could not connect to server" (likely firewall or Minikube networking issue).
+   - SSH-ed into Minikube and tested internally: curl -L http://10.111.211.250:80/demo – this worked, confirming the app is running inside the cluster.
+
+6. Troubleshooting:
+   - Confirmed deployment health: kubectl describe deployment sample-python-app showed pods running.
+   - Verified Service: kubectl get svc showed django-service with 80:30007/TCP.
+   - Identified external access issue: likely firewall on host blocking port 30007 or Minikube networking issue.
