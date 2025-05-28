@@ -1,0 +1,10 @@
+# dev-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-app
+  namespace: dev
+spec:
+  containers:
+  - name: nginx
+    image: nginx
