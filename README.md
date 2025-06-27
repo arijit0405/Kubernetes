@@ -1,2 +1,2 @@
 # Kubernetes
-My practices on kubernetes
+My practices on kubernetes and projects
